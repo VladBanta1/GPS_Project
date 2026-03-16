@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="GPS_Project/GPS_Project.vcxproj" />
+  <Project Path="GPS_Project/GPS_Project.vcxproj" Id="a3f4594d-62e8-4bca-9228-6f6a05d620fe" />
 </Solution>
