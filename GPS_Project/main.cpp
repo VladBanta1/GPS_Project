@@ -8,6 +8,8 @@
 GLuint grassTexture;
 GLuint skyTexture;
 GLuint mountainTexture;
+GLuint treeTexture;
+
 
 GLuint loadTexture(const char* path)
 {
@@ -141,6 +143,24 @@ void drawSky()
     glDepthMask(GL_TRUE);
 }
 
+void drawTree()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, treeTexture);
+
+    glBegin(GL_QUADS);
+
+    glTexCoord2f(0, 0); glVertex3f(-7, 0, 0);
+    glTexCoord2f(1, 0); glVertex3f(7, 0, 0);
+    glTexCoord2f(1, 1); glVertex3f(7, 15, 0);
+    glTexCoord2f(0, 1); glVertex3f(-7, 15, 0);
+
+    glEnd();
+}
+
 int main()
 {
     glfwInit();
@@ -160,24 +180,33 @@ int main()
     grassTexture = loadTexture("textures/grass.jpg");
     skyTexture = loadTexture("textures/sky.jpg");
     mountainTexture = loadTexture("textures/mountain.jpg");
+    treeTexture = loadTexture("textures/copac.png");
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.5f, 0.7f, 1.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // projection
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glFrustum(-2, 2, -1.5, 1.5, 1, 1000);
 
+        // camera
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(0, -3, -30);
         glRotatef(30, 1, 0, 0);
 
+        // render order
         drawSky();
         drawGround();
         drawMountains();
+
+        glPushMatrix();
+        glTranslatef(0, 0, 0);   // poziția copacului
+        drawTree();
+        glPopMatrix();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
