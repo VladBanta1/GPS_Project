@@ -7,6 +7,7 @@
 
 GLuint grassTexture;
 GLuint skyTexture;
+GLuint mountainTexture;
 
 GLuint loadTexture(const char* path)
 {
@@ -50,6 +51,40 @@ void drawGround()
     glTexCoord2f(10, 0); glVertex3f(50, 0, -50);
     glTexCoord2f(10, 10); glVertex3f(50, 0, 50);
     glTexCoord2f(0, 10); glVertex3f(-50, 0, 50);
+
+    glEnd();
+}
+
+void drawMountains()
+{
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, mountainTexture);
+
+    glBegin(GL_QUADS);
+
+    // back
+    glTexCoord2f(0, 0); glVertex3f(-50, 0, -50);
+    glTexCoord2f(1, 0); glVertex3f(50, 0, -50);
+    glTexCoord2f(1, 1); glVertex3f(50, 20, -50);
+    glTexCoord2f(0, 1); glVertex3f(-50, 20, -50);
+
+    // front
+    glTexCoord2f(0, 0); glVertex3f(-50, 0, 50);
+    glTexCoord2f(1, 0); glVertex3f(50, 0, 50);
+    glTexCoord2f(1, 1); glVertex3f(50, 20, 50);
+    glTexCoord2f(0, 1); glVertex3f(-50, 20, 50);
+
+    // left
+    glTexCoord2f(0, 0); glVertex3f(-50, 0, -50);
+    glTexCoord2f(1, 0); glVertex3f(-50, 0, 50);
+    glTexCoord2f(1, 1); glVertex3f(-50, 20, 50);
+    glTexCoord2f(0, 1); glVertex3f(-50, 20, -50);
+
+    // right
+    glTexCoord2f(0, 0); glVertex3f(50, 0, -50);
+    glTexCoord2f(1, 0); glVertex3f(50, 0, 50);
+    glTexCoord2f(1, 1); glVertex3f(50, 20, 50);
+    glTexCoord2f(0, 1); glVertex3f(50, 20, -50);
 
     glEnd();
 }
@@ -124,18 +159,17 @@ int main()
 
     grassTexture = loadTexture("textures/grass.jpg");
     skyTexture = loadTexture("textures/sky.jpg");
+    mountainTexture = loadTexture("textures/mountain.jpg");
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.5f, 0.7f, 1.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // projection
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glFrustum(-2, 2, -1.5, 1.5, 1, 1000);
 
-        // camera
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(0, -3, -30);
@@ -143,6 +177,7 @@ int main()
 
         drawSky();
         drawGround();
+        drawMountains();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
