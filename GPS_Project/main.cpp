@@ -5,6 +5,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+GLuint grassTexture;
 GLuint skyTexture;
 
 GLuint loadTexture(const char* path)
@@ -36,6 +37,21 @@ GLuint loadTexture(const char* path)
     stbi_image_free(data);
 
     return textureID;
+}
+
+void drawGround()
+{
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, grassTexture);
+
+    glBegin(GL_QUADS);
+
+    glTexCoord2f(0, 0); glVertex3f(-50, 0, -50);
+    glTexCoord2f(10, 0); glVertex3f(50, 0, -50);
+    glTexCoord2f(10, 10); glVertex3f(50, 0, 50);
+    glTexCoord2f(0, 10); glVertex3f(-50, 0, 50);
+
+    glEnd();
 }
 
 void drawSky()
@@ -106,6 +122,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
 
+    grassTexture = loadTexture("textures/grass.jpg");
     skyTexture = loadTexture("textures/sky.jpg");
 
     while (!glfwWindowShouldClose(window))
@@ -125,6 +142,7 @@ int main()
         glRotatef(30, 1, 0, 0);
 
         drawSky();
+        drawGround();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
