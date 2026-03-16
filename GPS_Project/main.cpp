@@ -9,7 +9,8 @@ GLuint grassTexture;
 GLuint skyTexture;
 GLuint mountainTexture;
 GLuint treeTexture;
-
+GLuint rock1Texture;
+GLuint rock2Texture;
 
 GLuint loadTexture(const char* path)
 {
@@ -161,6 +162,42 @@ void drawTree()
     glEnd();
 }
 
+void drawRock1()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, rock1Texture);
+
+    glBegin(GL_QUADS);
+
+    glTexCoord2f(0, 0); glVertex3f(-6, 0, 0);
+    glTexCoord2f(1, 0); glVertex3f(6, 0, 0);
+    glTexCoord2f(1, 1); glVertex3f(6, 6, 0);
+    glTexCoord2f(0, 1); glVertex3f(-6, 6, 0);
+
+    glEnd();
+}
+
+void drawRock2()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, rock2Texture);
+
+    glBegin(GL_QUADS);
+
+    glTexCoord2f(0, 0); glVertex3f(-10, 0, 0);
+    glTexCoord2f(1, 0); glVertex3f(10, 0, 0);
+    glTexCoord2f(1, 1); glVertex3f(10, 10, 0);
+    glTexCoord2f(0, 1); glVertex3f(-10, 10, 0);
+
+    glEnd();
+}
+
 int main()
 {
     glfwInit();
@@ -181,6 +218,8 @@ int main()
     skyTexture = loadTexture("textures/sky.jpg");
     mountainTexture = loadTexture("textures/mountain.jpg");
     treeTexture = loadTexture("textures/copac.png");
+    rock1Texture = loadTexture("textures/roci1.png");
+    rock2Texture = loadTexture("textures/roci2.png");
 
     while (!glfwWindowShouldClose(window))
     {
@@ -203,9 +242,46 @@ int main()
         drawGround();
         drawMountains();
 
+        // ===== COPACI (spate) =====
+
         glPushMatrix();
-        glTranslatef(0, 0, 0);   // poziția copacului
+        glTranslatef(-35, 0, -15);
+        glScalef(0.75, 0.75, 0.75);
         drawTree();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-19, 0, 10);
+        glScalef(1, 1, 1);
+        drawTree();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0, 0, 5);
+        glScalef(1, 1, 1);
+        drawTree();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(33, 0, -15);
+        glScalef(0.8, 0.8, 0.8);
+        drawTree();
+        glPopMatrix();
+
+
+
+        // ===== ROCILE (prim plan) =====
+
+        glPushMatrix();
+        glTranslatef(-20, 0, -15);
+        glScalef(0.9, 0.9, 1);
+        drawRock2();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(20, 0, -8);
+        glScalef(0.9, 0.9, 1);
+        drawRock2();
         glPopMatrix();
 
         glfwSwapBuffers(window);
